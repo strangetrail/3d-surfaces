@@ -10,6 +10,10 @@ find_package( OpenGL REQUIRED )
 find_package( glm CONFIG REQUIRED )
 find_package( SDL2 CONFIG REQUIRED )
 
+include_directories(SYSTEM anttweakbar/include)
+
+add_subdirectory(anttweakbar EXCLUDE_FROM_ALL)
+
 set(target 3dsurfaces.elf)
 
 set(3dsurfaces_SOURCES
@@ -26,6 +30,7 @@ target_link_libraries(${target}
   PRIVATE
   GL
   SDL2
+  AntTweakBar
 )
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

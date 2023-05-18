@@ -23,6 +23,8 @@ class GLProgram {
         SDL_Renderer *renderer;
         SDL_RendererInfo info;
 
+        TwBar *myBar;
+
         int quit;
 
         struct color {
@@ -42,7 +44,7 @@ class GLProgram {
 
     public:
         enum class CleanupMode {sdl_quit, sdl_destroy_window,
-          sdl_gl_delete_context, sdl_destroy_renderer, delete_buffers};
+          sdl_gl_delete_context, sdl_destroy_renderer, tw_terminate, delete_buffers};
 
         SDL_Event event;
 

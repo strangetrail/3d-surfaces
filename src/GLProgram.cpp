@@ -75,6 +75,10 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
       exit(7);
     }
 
+    TwInit(TW_OPENGL_CORE, NULL);
+    TwWindowSize(this->windowWidth, this->windowHeight);
+    this->myBar = TwNewBar("Settings");
+
     // GL calls
     glViewport(0, 0, this->windowWidth, this->windowHeight);
     glEnable(GL_DEPTH_TEST);
@@ -91,6 +95,7 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
 }
 
 void GLProgram::run(void) {
+    int handled;
     this->quit = 0;
 
     // main loop
@@ -128,8 +133,12 @@ void GLProgram::run(void) {
 
         // check and call events and swap buffers
         while (SDL_PollEvent(&this->event)) {
-          if (this->event.type == SDL_QUIT)
+          handled = TwEventSDL(&this->event, SDL_MAJOR_VERSION, SDL_MINOR_VERSION);
+          if (!handled) {
+            if (this->event.type == SDL_QUIT) {
               this->quit = 1;
+            }
+          }
         }
         SDL_GL_SwapWindow(this->window);
     }
@@ -211,6 +220,9 @@ void GLProgram::cleanup(CleanupMode cm) {
       glDeleteVertexArrays(1, &(this->cubeVAO));
       glDeleteBuffers(1, &(this->cubeVBO));
       glDeleteBuffers(1, &this->cubeEBO);
+      [[fallthrough]];
+    case CleanupMode::tw_terminate:
+      TwTerminate();
       [[fallthrough]];
     case CleanupMode::sdl_destroy_renderer:
       SDL_DestroyRenderer(this->renderer);
