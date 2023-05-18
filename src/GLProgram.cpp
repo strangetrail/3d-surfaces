@@ -78,6 +78,8 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
     TwInit(TW_OPENGL_CORE, NULL);
     TwWindowSize(this->windowWidth, this->windowHeight);
     this->myBar = TwNewBar("Settings");
+    TwAddVarRW(this->myBar, "Camera eye", TW_TYPE_FLOAT, &this->camera.position,
+               " label='Camera eye position' min=-10.0 max=100.0 step=0.1 ");
 
     // GL calls
     glViewport(0, 0, this->windowWidth, this->windowHeight);

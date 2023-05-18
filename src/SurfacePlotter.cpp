@@ -2,7 +2,7 @@
 
 // default constructor
 SurfacePlotter::SurfacePlotter() :
-    xMin(-10.0f), xMax(10.0f), yMin(-10.0f), yMax(10.0f), gridInterval(0.2f), zMin(FLOAT_MAX), zMax(FLOAT_MIN),
+    xMin(-20.0f), xMax(20.0f), yMin(-20.0f), yMax(20.0f), gridInterval(0.1f), zMin(FLOAT_MAX), zMax(FLOAT_MIN),
     vertices(NULL), numElements(0), indices(NULL), numIndices(0), cubeVertices(NULL), cubeIndices(NULL) {
 
     setGrid(this->xMin, this->xMax, this->yMin, this->yMax, this->gridInterval);

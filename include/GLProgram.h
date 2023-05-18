@@ -84,7 +84,7 @@ class GLProgram {
         */
 
         // input
-        void processInput(void);
+        //void processInput(void);
 };
 
 #endif //GLPROGRAM_H

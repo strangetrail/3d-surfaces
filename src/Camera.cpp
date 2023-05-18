@@ -2,9 +2,9 @@
 
 // default constructor
 Camera::Camera() :
-    position(0.0f, 0.0f,  30.0f),
-    front(0.0f, 0.0f, -0.5f),
-    up(1.0f, 0.0f,  0.0f),
+    position(30.0f),
+    front(-0.5f),
+    up(1.0f, 0.0f, 0.0f),
     right(0.0f, -1.0f, 0.0f),
     movementSpeed(15.0f),
     zoom(45.0f),
@@ -12,7 +12,7 @@ Camera::Camera() :
     {}
 
 glm::mat4 Camera::getViewMatrix(void) {
-    return glm::lookAt(this->position, this->position + this->front, this->up);
+    return glm::lookAt(glm::vec3(0.0f, 0.0f, this->position), glm::vec3(0.0f, 0.0f, this->front), this->up);
 }
 
 /*
