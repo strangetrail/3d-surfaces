@@ -1,8 +1,7 @@
 #include "../include/GLProgram.h"
 #include "glm/ext.hpp"
 
-GLProgram::GLProgram() :
-    deltaTime(0.0f), prevTime(0.0f) {}
+GLProgram::GLProgram() {}
 
 void GLProgram::init(const char* vertexPath, const char* fragmentPath, const char* whiteFragmentPath) {
 
@@ -26,7 +25,7 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
     SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER, 1);
 
-    this->window = SDL_CreateWindow("My Textured Cube",
+    this->window = SDL_CreateWindow("3D Surfaces",
       SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
       this->windowWidth, this->windowHeight,
       SDL_WINDOW_OPENGL);
@@ -85,7 +84,7 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
     this->whiteShader = Shader(vertexPath, whiteFragmentPath);
 
     // generate default surface plot
-    this->surfacePlotter.generateSurfacePlot(1.0f);
+    this->surfacePlotter.generateSurfacePlot();
 
     // set up VAOs and VBOs and EBOs
     initDrawingData();
@@ -97,11 +96,6 @@ void GLProgram::run(void) {
     // main loop
     while (!this->quit) {
 
-        // per-frame time logic
-        float currTime = SDL_GetTicks() / 1000.0;
-        this->deltaTime = currTime - this->prevTime;
-        this->prevTime = currTime;
-
         // input
         //processInput();
 
@@ -109,7 +103,7 @@ void GLProgram::run(void) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // computation
-        surfacePlotter.generateSurfacePlot(1.0f);
+        surfacePlotter.generateSurfacePlot();
 
         // set up shader and transformation matrices
         // TODO: condense this part
@@ -128,7 +122,7 @@ void GLProgram::run(void) {
         this->whiteShader.setMat4Uniform("model", getDefaultModelMatrix() * modelMatrix);
 
         // render
-        this->surfacePlotter.generateSurfacePlot((float)(SDL_GetTicks() / 1000.0));
+        this->surfacePlotter.generateSurfacePlot();
         drawSurfacePlot();
         drawCube();
 

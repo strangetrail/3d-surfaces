@@ -25,8 +25,6 @@ class GLProgram {
 
         int quit;
 
-        float deltaTime, prevTime;
-
         struct color {
             float r = 0.0f;
             float g = 0.0f;
