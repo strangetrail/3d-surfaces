@@ -1,7 +1,7 @@
 #include "../include/GLProgram.h"
 
-#define WINDOW_WIDTH 1600
-#define WINDOW_HEIGHT 1200
+#define WINDOW_WIDTH 1368
+#define WINDOW_HEIGHT 768
 
 // shader source code paths
 const char* vertexShaderPath = "shaders/vertexShader.vs";
@@ -21,6 +21,6 @@ int main() {
     program.init(vertexShaderPath, fragmentShaderPath, whiteFragmentShaderPath);
     program.setClearColor(0.05f, 0.18f, 0.25f, 1.0f);
     program.run();
-    program.cleanup();
+    program.cleanup(GLProgram::CleanupMode::delete_buffers);
     return 0;
 }

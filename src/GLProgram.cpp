@@ -7,30 +7,73 @@ GLProgram::GLProgram() :
 void GLProgram::init(const char* vertexPath, const char* fragmentPath, const char* whiteFragmentPath) {
 
     // initialize window system
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SAMPLES, 4);
+    SDL_SetMainReady();
+    SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO);
 
-    this->window = glfwCreateWindow(this->windowWidth,this-> windowHeight, "3D Surface Plotter", NULL, NULL);
-    if (this->window == NULL) {
-        std::cout << "FAILED TO CREATE GLFW WINDOW" << std::endl;
-        glfwTerminate();
-        exit(-1);
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Video initialization failed: %s\n", SDL_GetError());
+        exit(1);
     }
 
-    glfwMakeContextCurrent(this->window);
-    glfwSetFramebufferSizeCallback(this->window, framebufferSizeCallback);
-    glfwSetScrollCallback(window, scrollCallback);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
-    glfwSetCursorPosCallback(window, cursorPosCallback);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
-    // initialize GLAD before making OpenGL calls
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "FAILED TO INITIALIZE GLAD" << std::endl;
-        exit(-1);
+    SDL_GL_SetAttribute (SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute (SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute (SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, 16);
+    SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER, 1);
+
+    this->window = SDL_CreateWindow("My Textured Cube",
+      SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+      this->windowWidth, this->windowHeight,
+      SDL_WINDOW_OPENGL);
+    if (this->window == NULL) {
+      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL window initialization failed: %s\n", SDL_GetError());
+      cleanup(CleanupMode::sdl_quit);
+      exit(2);
+    }
+
+    this->context = SDL_GL_CreateContext(this->window);
+    if (this->context == NULL)
+    {
+      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unable to create OpenGL context: %s\n", SDL_GetError());
+      cleanup(CleanupMode::sdl_destroy_window);
+      exit(3);
+    }
+
+    if (SDL_GL_MakeCurrent(window, context) < 0)
+    {
+      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Can not set SDL GL context as current context: %s\n", SDL_GetError());
+      cleanup(CleanupMode::sdl_gl_delete_context);
+      exit(4);
+    }
+
+    this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
+    if (this->renderer == NULL)
+    {
+      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL GL renderer initialization failed: %s", SDL_GetError());
+      cleanup(CleanupMode::sdl_gl_delete_context);
+      exit(5);
+    }
+
+    if (SDL_GetRendererInfo(renderer, &info) < 0)
+    {
+      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Could not retrieve SDL renderer info: %s", SDL_GetError());
+      cleanup(CleanupMode::sdl_destroy_renderer);
+      exit(6);
+    }
+
+    SDL_GL_SetSwapInterval(1);
+
+    GLint max_units;
+    glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &max_units);
+    if (max_units < 1) {
+      fprintf(stderr, "Your GPU does not have any vertex texture image units\n");
+      cleanup(CleanupMode::sdl_destroy_renderer);
+      exit(7);
     }
 
     // GL calls
@@ -49,17 +92,18 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
 }
 
 void GLProgram::run(void) {
+    this->quit = 0;
 
     // main loop
-    while (!glfwWindowShouldClose(this->window)) {
+    while (!this->quit) {
 
         // per-frame time logic
-        float currTime = glfwGetTime();
+        float currTime = SDL_GetTicks() / 1000.0;
         this->deltaTime = currTime - this->prevTime;
         this->prevTime = currTime;
 
         // input
-        processInput();
+        //processInput();
 
         glClearColor(this->clearColor.r, this->clearColor.g, this->clearColor.b, this->clearColor.alpha);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -84,13 +128,16 @@ void GLProgram::run(void) {
         this->whiteShader.setMat4Uniform("model", getDefaultModelMatrix() * modelMatrix);
 
         // render
-        this->surfacePlotter.generateSurfacePlot((float)glfwGetTime());
+        this->surfacePlotter.generateSurfacePlot((float)(SDL_GetTicks() / 1000.0));
         drawSurfacePlot();
         drawCube();
 
         // check and call events and swap buffers
-        glfwSwapBuffers((this->window));
-        glfwPollEvents();
+        while (SDL_PollEvent(&this->event)) {
+          if (this->event.type == SDL_QUIT)
+              this->quit = 1;
+        }
+        SDL_GL_SwapWindow(this->window);
     }
 }
 
@@ -160,19 +207,30 @@ void GLProgram::drawCube(void) {
     glBindVertexArray(0);
 }
 
-void GLProgram::cleanup(void) {
+void GLProgram::cleanup(CleanupMode cm) {
+    switch (cm) {
+    case CleanupMode::delete_buffers:
+      glDeleteVertexArrays(1, &(this->surfacePlotVAO));
+      glDeleteBuffers(1, &(this->surfacePlotVBO));
+      glDeleteBuffers(1, &this->surfacePlotEBO);
 
-    // clean up gl resources
-    glDeleteVertexArrays(1, &(this->surfacePlotVAO));
-    glDeleteBuffers(1, &(this->surfacePlotVBO));
-    glDeleteBuffers(1, &this->surfacePlotEBO);
-
-    glDeleteVertexArrays(1, &(this->cubeVAO));
-    glDeleteBuffers(1, &(this->cubeVBO));
-    glDeleteBuffers(1, &this->cubeEBO);
-
-    // clean up glfw
-    glfwTerminate();
+      glDeleteVertexArrays(1, &(this->cubeVAO));
+      glDeleteBuffers(1, &(this->cubeVBO));
+      glDeleteBuffers(1, &this->cubeEBO);
+      [[fallthrough]];
+    case CleanupMode::sdl_destroy_renderer:
+      SDL_DestroyRenderer(this->renderer);
+      [[fallthrough]];
+    case CleanupMode::sdl_gl_delete_context:
+      SDL_GL_DeleteContext(this->context);
+      [[fallthrough]];
+    case CleanupMode::sdl_destroy_window:
+      SDL_DestroyWindow(this->window);
+      [[fallthrough]];
+    case CleanupMode::sdl_quit:
+      SDL_Quit();
+      break;
+    }
 }
 
 void GLProgram::setClearColor(float r, float g, float b, float alpha) {
@@ -204,12 +262,15 @@ glm::mat4 GLProgram::getDefaultModelMatrix(void) {
     return glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
+/*
 void GLProgram::framebufferSizeCallback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
     windowWidth = width;
     windowHeight = height;
 }
+*/
 
+/*
 void GLProgram::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 
     if (button == GLFW_MOUSE_BUTTON_LEFT) {
@@ -222,11 +283,15 @@ void GLProgram::mouseButtonCallback(GLFWwindow* window, int button, int action, 
         }
     }
 }
+*/
 
+/*
 void GLProgram::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.processMouseScroll(yoffset);
 }
+*/
 
+/*
 void GLProgram::cursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
 
     if (mousePressed) {
@@ -257,6 +322,7 @@ void GLProgram::cursorPosCallback(GLFWwindow* window, double xpos, double ypos) 
         prevMouseY = currMouseY;
     }
 }
+*/
 
 glm::vec3 GLProgram::getArcballVector(float x, float y) {
 
@@ -276,6 +342,7 @@ glm::vec3 GLProgram::getArcballVector(float x, float y) {
     return P;
 }
 
+/*
 void GLProgram::processInput(void) {
 
     // close window with 'ESC' key
@@ -292,3 +359,4 @@ void GLProgram::processInput(void) {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.processKeyboard(RIGHT, deltaTime);
 }
+*/

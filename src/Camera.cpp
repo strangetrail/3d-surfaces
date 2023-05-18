@@ -15,6 +15,7 @@ glm::mat4 Camera::getViewMatrix(void) {
     return glm::lookAt(this->position, this->position + this->front, this->up);
 }
 
+/*
 void Camera::processKeyboard(CameraMovement direction, float deltaTime) {
     float velocity = this->movementSpeed * deltaTime;
     switch (direction) {
@@ -32,7 +33,9 @@ void Camera::processKeyboard(CameraMovement direction, float deltaTime) {
             break;
     }
 }
+*/
 
+/*
 void Camera::processMouseScroll(float yOffset) {
     this->zoom -= (float) yOffset * this->zoomSpeed;
 
@@ -42,3 +45,4 @@ void Camera::processMouseScroll(float yOffset) {
     if (this->zoom > MAX_ZOOM)
         this->zoom = MAX_ZOOM;
 }
+*/
