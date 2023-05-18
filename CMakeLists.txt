@@ -24,6 +24,11 @@ set(3dsurfaces_SOURCES
   src/Camera.cpp
 )
 
+set(ignoreMe "${BUILD_DEBUG}")
+if(NOT MSVC AND DEFINED BUILD_DEBUG)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -Wextra -Wpedantic -g3 -ggdb -ggdb3 -gdwarf-4")
+endif()
+
 add_executable(${target} ${3dsurfaces_SOURCES})
 
 target_link_libraries(${target}
