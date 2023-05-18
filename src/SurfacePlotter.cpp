@@ -33,7 +33,7 @@ void SurfacePlotter::setGrid(float xMin, float xMax, float yMin, float yMax, flo
     }
 }
 
-void SurfacePlotter::generateSurfacePlot() {
+void SurfacePlotter::generateSurfacePlot(PlotIndex plot_index) {
 
     // reset ranges
     this->zMin = FLOAT_MAX;
@@ -64,7 +64,7 @@ void SurfacePlotter::generateSurfacePlot() {
             // add vertex
             this->vertices[(x * numY + y) * 3 + 0] = this->gridPoints[x][y].x; // x
             this->vertices[(x * numY + y) * 3 + 1] = this->gridPoints[x][y].y; // y
-            this->vertices[(x * numY + y) * 3 + 2] = f(this->gridPoints[x][y].x, this->gridPoints[x][y].y);
+            this->vertices[(x * numY + y) * 3 + 2] = f(this->gridPoints[x][y].x, this->gridPoints[x][y].y, plot_index);
         }
     }
 
@@ -99,13 +99,22 @@ void SurfacePlotter::generateSurfacePlot() {
     generateCube();
 }
 
-float SurfacePlotter::f(float x, float y) {
+float SurfacePlotter::f(float x, float y, PlotIndex plot_index) {
 
     // EQUATION
-    //float z = sin(t) * 8*sin(sqrt(pow(x, 2) + pow(y, 2))) / sqrt(pow(x, 2) + pow(y, 2)); // sombrero equation
-    float z = 8*sin(sqrt(pow(x, 2) + pow(y, 2))) / sqrt(pow(x, 2) + pow(y, 2)); // sombrero equation
-    //float z = sin(pow(x/2.5, 2) + pow(y/2.5, 2));
-    //float z = (pow(x/1.5,2) + pow(y/1.5,2)) * 0.3; // parabaloid
+    float z;
+    switch (plot_index) {
+    case PlotIndex::plot_sombrero:
+      //float z = sin(t) * 8*sin(sqrt(pow(x, 2) + pow(y, 2))) / sqrt(pow(x, 2) + pow(y, 2)); // sombrero equation
+      z = 8*sin(sqrt(pow(x, 2) + pow(y, 2))) / sqrt(pow(x, 2) + pow(y, 2)); // sombrero equation
+      break;
+    case PlotIndex::plot_quadsin:
+      z = sin(pow(x/2.5, 2) + pow(y/2.5, 2));
+      break;
+    case PlotIndex::plot_paraboloid:
+      z = (pow(x/1.5,2) + pow(y/1.5,2)) * 0.3; // parabaloid
+      break;
+    }
 
     // update z ranges
     if (z < this->zMin)

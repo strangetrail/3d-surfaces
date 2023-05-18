@@ -90,6 +90,10 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
                " label='Camera center position Y' min=-100.0 max=100.0 step=0.1 ");
     TwAddVarRW(this->myBar, "Camera center X", TW_TYPE_FLOAT, &this->camera.x_front,
                " label='Camera center position X' min=-100.0 max=100.0 step=0.1 ");
+    TwAddVarRW(this->myBar, "Plot index", TW_TYPE_INT32, &this->current_index,
+               " label='Plot index' min=0 max=2 ");
+
+    this->current_index = static_cast<int>(SurfacePlotter::PlotIndex::plot_sombrero);
 
     // GL calls
     glViewport(0, 0, this->windowWidth, this->windowHeight);
@@ -100,7 +104,7 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
     this->whiteShader = Shader(vertexPath, whiteFragmentPath);
 
     // generate default surface plot
-    this->surfacePlotter.generateSurfacePlot();
+    this->surfacePlotter.generateSurfacePlot(static_cast<SurfacePlotter::PlotIndex>(this->current_index));
 
     // set up VAOs and VBOs and EBOs
     initDrawingData();
@@ -120,7 +124,7 @@ void GLProgram::run(void) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // computation
-        surfacePlotter.generateSurfacePlot();
+        surfacePlotter.generateSurfacePlot(static_cast<SurfacePlotter::PlotIndex>(this->current_index));
 
         // set up shader and transformation matrices
         // TODO: condense this part
@@ -139,7 +143,7 @@ void GLProgram::run(void) {
         this->whiteShader.setMat4Uniform("model", getDefaultModelMatrix() * modelMatrix);
 
         // render
-        this->surfacePlotter.generateSurfacePlot();
+        this->surfacePlotter.generateSurfacePlot(static_cast<SurfacePlotter::PlotIndex>(this->current_index));
         drawSurfacePlot();
         drawCube();
 
