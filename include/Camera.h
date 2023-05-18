@@ -17,8 +17,8 @@ enum CameraMovement {
 
 class Camera {
     public:
-        float position;
-        float front;
+        float z_position, y_position, x_position;
+        float z_front, y_front, x_front;
         glm::vec3 up;
         glm::vec3 right;
 

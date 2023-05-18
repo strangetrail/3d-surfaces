@@ -78,8 +78,18 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
     TwInit(TW_OPENGL_CORE, NULL);
     TwWindowSize(this->windowWidth, this->windowHeight);
     this->myBar = TwNewBar("Settings");
-    TwAddVarRW(this->myBar, "Camera eye", TW_TYPE_FLOAT, &this->camera.position,
-               " label='Camera eye position' min=-10.0 max=100.0 step=0.1 ");
+    TwAddVarRW(this->myBar, "Camera eye Z", TW_TYPE_FLOAT, &this->camera.z_position,
+               " label='Camera eye position Z' min=-100.0 max=100.0 step=0.1 ");
+    TwAddVarRW(this->myBar, "Camera eye Y", TW_TYPE_FLOAT, &this->camera.y_position,
+               " label='Camera eye position Y' min=-100.0 max=100.0 step=0.1 ");
+    TwAddVarRW(this->myBar, "Camera eye X", TW_TYPE_FLOAT, &this->camera.x_position,
+               " label='Camera eye position X' min=-100.0 max=100.0 step=0.1 ");
+    TwAddVarRW(this->myBar, "Camera center Z", TW_TYPE_FLOAT, &this->camera.z_front,
+               " label='Camera center position Z' min=-100.0 max=100.0 step=0.1 ");
+    TwAddVarRW(this->myBar, "Camera center Y", TW_TYPE_FLOAT, &this->camera.y_front,
+               " label='Camera center position Y' min=-100.0 max=100.0 step=0.1 ");
+    TwAddVarRW(this->myBar, "Camera center X", TW_TYPE_FLOAT, &this->camera.x_front,
+               " label='Camera center position X' min=-100.0 max=100.0 step=0.1 ");
 
     // GL calls
     glViewport(0, 0, this->windowWidth, this->windowHeight);
