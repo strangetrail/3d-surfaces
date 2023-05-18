@@ -131,6 +131,8 @@ void GLProgram::run(void) {
         drawSurfacePlot();
         drawCube();
 
+        TwDraw();
+
         // check and call events and swap buffers
         while (SDL_PollEvent(&this->event)) {
           handled = TwEventSDL(&this->event, SDL_MAJOR_VERSION, SDL_MINOR_VERSION);
