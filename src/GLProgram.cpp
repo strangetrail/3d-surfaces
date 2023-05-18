@@ -103,9 +103,6 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
     this->shader = Shader(vertexPath, fragmentPath);
     this->whiteShader = Shader(vertexPath, whiteFragmentPath);
 
-    // generate default surface plot
-    this->surfacePlotter.generateSurfacePlot(static_cast<SurfacePlotter::PlotIndex>(this->current_index));
-
     // set up VAOs and VBOs and EBOs
     initDrawingData();
 }
@@ -212,6 +209,8 @@ void GLProgram::drawSurfacePlot(void) {
     glBindVertexArray(this->surfacePlotVAO);
     glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
     glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements()*sizeof(float), this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotter.getNumIndices()*sizeof(uint), this->surfacePlotter.getIndices(), GL_DYNAMIC_DRAW);
     glDrawElements(GL_LINES, this->surfacePlotter.getNumIndices(),GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
@@ -221,6 +220,8 @@ void GLProgram::drawCube(void) {
     glBindVertexArray(this->cubeVAO);
     glBindBuffer(GL_ARRAY_BUFFER, this->cubeVBO);
     glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), this->surfacePlotter.getCubeVertices(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->cubeEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 24*sizeof(uint), this->surfacePlotter.getCubeIndices(), GL_STATIC_DRAW);
     glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
