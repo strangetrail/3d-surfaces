@@ -123,9 +123,6 @@ void GLProgram::run(void) {
         glClearColor(this->clearColor.r, this->clearColor.g, this->clearColor.b, this->clearColor.alpha);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // computation
-        surfacePlotter.generateSurfacePlot(static_cast<SurfacePlotter::PlotIndex>(this->current_index));
-
         // set up shader and transformation matrices
         // TODO: condense this part
         glm::mat4 viewMatrix = getViewMatrix();
