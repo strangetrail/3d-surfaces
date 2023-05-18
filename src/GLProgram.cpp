@@ -169,16 +169,13 @@ void GLProgram::initDrawingData(void) {
 
     // set VBO data
     glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
-    glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements()*sizeof(float), this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
 
     // set EBO data
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotter.getNumIndices()*sizeof(uint), this->surfacePlotter.getIndices(), GL_DYNAMIC_DRAW);
 
     // vertices attributes
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(0);
-
 
     // CUBE
 
@@ -191,11 +188,9 @@ void GLProgram::initDrawingData(void) {
 
     // set VBO data
     glBindBuffer(GL_ARRAY_BUFFER, this->cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), this->surfacePlotter.getCubeVertices(), GL_STATIC_DRAW);
 
     // set EBO data
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->cubeEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 24*sizeof(uint), this->surfacePlotter.getCubeIndices(), GL_STATIC_DRAW);
 
     // vertices attributes
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
