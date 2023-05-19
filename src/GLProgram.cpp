@@ -103,6 +103,10 @@ void GLProgram::init(const char *vertexPath, const char *fragmentPath, const cha
 
   // set up VAOs and VBOs and EBOs
   initDrawingData();
+
+  glEnable(GL_BLEND);
+  glEnable(GL_DEPTH_TEST);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void GLProgram::run(void) {
