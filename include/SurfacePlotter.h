@@ -16,8 +16,7 @@
 class SurfacePlotter {
 private:
   // xy grid
-  std::vector<std::vector<glm::vec2>>
-      gridPoints; // 2D array of grid x, y coordinates
+  std::vector<std::vector<glm::vec2>> gridPoints; // 2D array of grid x, y coordinates
   float xMin;
   float xMax;
   float yMin;
@@ -37,11 +36,7 @@ private:
   uint *cubeIndices;
 
 public:
-  enum class PlotIndex : std::int32_t {
-    plot_sombrero = 0,
-    plot_quadsin = 1,
-    plot_paraboloid = 2
-  };
+  enum class PlotIndex : std::int32_t { plot_sombrero = 0, plot_quadsin = 1, plot_paraboloid = 2 };
 
   SurfacePlotter();
 

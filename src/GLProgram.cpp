@@ -3,16 +3,14 @@
 
 GLProgram::GLProgram() {}
 
-void GLProgram::init(const char *vertexPath, const char *fragmentPath,
-                     const char *whiteFragmentPath) {
+void GLProgram::init(const char *vertexPath, const char *fragmentPath, const char *whiteFragmentPath) {
 
   // initialize window system
   SDL_SetMainReady();
   SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO);
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "Video initialization failed: %s\n", SDL_GetError());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Video initialization failed: %s\n", SDL_GetError());
     exit(1);
   }
 
@@ -26,44 +24,36 @@ void GLProgram::init(const char *vertexPath, const char *fragmentPath,
   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-  this->window = SDL_CreateWindow("3D Surfaces", SDL_WINDOWPOS_CENTERED,
-                                  SDL_WINDOWPOS_CENTERED, this->windowWidth,
-                                  this->windowHeight, SDL_WINDOW_OPENGL);
+  this->window = SDL_CreateWindow("3D Surfaces", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->windowWidth, this->windowHeight,
+                                  SDL_WINDOW_OPENGL);
   if (this->window == NULL) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "SDL window initialization failed: %s\n", SDL_GetError());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL window initialization failed: %s\n", SDL_GetError());
     cleanup(CleanupMode::sdl_quit);
     exit(2);
   }
 
   this->context = SDL_GL_CreateContext(this->window);
   if (this->context == NULL) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "Unable to create OpenGL context: %s\n", SDL_GetError());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unable to create OpenGL context: %s\n", SDL_GetError());
     cleanup(CleanupMode::sdl_destroy_window);
     exit(3);
   }
 
   if (SDL_GL_MakeCurrent(window, context) < 0) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "Can not set SDL GL context as current context: %s\n",
-                 SDL_GetError());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Can not set SDL GL context as current context: %s\n", SDL_GetError());
     cleanup(CleanupMode::sdl_gl_delete_context);
     exit(4);
   }
 
-  this->renderer = SDL_CreateRenderer(
-      this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
+  this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
   if (this->renderer == NULL) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "SDL GL renderer initialization failed: %s", SDL_GetError());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL GL renderer initialization failed: %s", SDL_GetError());
     cleanup(CleanupMode::sdl_gl_delete_context);
     exit(5);
   }
 
   if (SDL_GetRendererInfo(renderer, &info) < 0) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "Could not retrieve SDL renderer info: %s", SDL_GetError());
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Could not retrieve SDL renderer info: %s", SDL_GetError());
     cleanup(CleanupMode::sdl_destroy_renderer);
     exit(6);
   }
@@ -81,32 +71,23 @@ void GLProgram::init(const char *vertexPath, const char *fragmentPath,
   TwInit(TW_OPENGL_CORE, NULL);
   TwWindowSize(this->windowWidth, this->windowHeight);
   this->myBar = TwNewBar("Settings");
-  TwAddVarRW(this->myBar, "Camera eye Z", TW_TYPE_FLOAT,
-             &this->camera.z_position,
+  TwAddVarRW(this->myBar, "Camera eye Z", TW_TYPE_FLOAT, &this->camera.z_position,
              " label='Camera eye position Z' min=-100.0 max=100.0 step=0.1 ");
-  TwAddVarRW(this->myBar, "Camera eye Y", TW_TYPE_FLOAT,
-             &this->camera.y_position,
+  TwAddVarRW(this->myBar, "Camera eye Y", TW_TYPE_FLOAT, &this->camera.y_position,
              " label='Camera eye position Y' min=-100.0 max=100.0 step=0.1 ");
-  TwAddVarRW(this->myBar, "Camera eye X", TW_TYPE_FLOAT,
-             &this->camera.x_position,
+  TwAddVarRW(this->myBar, "Camera eye X", TW_TYPE_FLOAT, &this->camera.x_position,
              " label='Camera eye position X' min=-100.0 max=100.0 step=0.1 ");
-  TwAddVarRW(
-      this->myBar, "Camera center Z", TW_TYPE_FLOAT, &this->camera.z_front,
-      " label='Camera center position Z' min=-100.0 max=100.0 step=0.1 ");
-  TwAddVarRW(
-      this->myBar, "Camera center Y", TW_TYPE_FLOAT, &this->camera.y_front,
-      " label='Camera center position Y' min=-100.0 max=100.0 step=0.1 ");
-  TwAddVarRW(
-      this->myBar, "Camera center X", TW_TYPE_FLOAT, &this->camera.x_front,
-      " label='Camera center position X' min=-100.0 max=100.0 step=0.1 ");
-  TwAddVarRW(this->myBar, "Plot index", TW_TYPE_INT32, &this->current_index,
-             " label='Plot index' min=0 max=2 ");
-  TwAddVarRW(this->myBar, "Plot rotation around z", TW_TYPE_FLOAT,
-             &this->rotation,
+  TwAddVarRW(this->myBar, "Camera center Z", TW_TYPE_FLOAT, &this->camera.z_front,
+             " label='Camera center position Z' min=-100.0 max=100.0 step=0.1 ");
+  TwAddVarRW(this->myBar, "Camera center Y", TW_TYPE_FLOAT, &this->camera.y_front,
+             " label='Camera center position Y' min=-100.0 max=100.0 step=0.1 ");
+  TwAddVarRW(this->myBar, "Camera center X", TW_TYPE_FLOAT, &this->camera.x_front,
+             " label='Camera center position X' min=-100.0 max=100.0 step=0.1 ");
+  TwAddVarRW(this->myBar, "Plot index", TW_TYPE_INT32, &this->current_index, " label='Plot index' min=0 max=2 ");
+  TwAddVarRW(this->myBar, "Plot rotation around z", TW_TYPE_FLOAT, &this->rotation,
              " label='Plot rotation around z' min=-360.0 max=360.0 ");
 
-  this->current_index =
-      static_cast<int>(SurfacePlotter::PlotIndex::plot_sombrero);
+  this->current_index = static_cast<int>(SurfacePlotter::PlotIndex::plot_sombrero);
 
   // GL calls
   glViewport(0, 0, this->windowWidth, this->windowHeight);
@@ -118,8 +99,7 @@ void GLProgram::init(const char *vertexPath, const char *fragmentPath,
 
   rotation = 0.0f;
 
-  this->surfacePlotter.generateSurfacePlotIndices(
-      static_cast<SurfacePlotter::PlotIndex>(this->current_index));
+  this->surfacePlotter.generateSurfacePlotIndices(static_cast<SurfacePlotter::PlotIndex>(this->current_index));
 
   // set up VAOs and VBOs and EBOs
   initDrawingData();
@@ -135,8 +115,7 @@ void GLProgram::run(void) {
     // input
     // processInput();
 
-    glClearColor(this->clearColor.r, this->clearColor.g, this->clearColor.b,
-                 this->clearColor.alpha);
+    glClearColor(this->clearColor.r, this->clearColor.g, this->clearColor.b, this->clearColor.alpha);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // set up shader and transformation matrices
@@ -153,12 +132,10 @@ void GLProgram::run(void) {
     this->whiteShader.use();
     this->whiteShader.setMat4Uniform("view", viewMatrix);
     this->whiteShader.setMat4Uniform("projection", projectionMatrix);
-    this->whiteShader.setMat4Uniform("model",
-                                     getDefaultModelMatrix() * modelMatrix);
+    this->whiteShader.setMat4Uniform("model", getDefaultModelMatrix() * modelMatrix);
 
     // render
-    this->surfacePlotter.generateSurfacePlotVertices(
-        static_cast<SurfacePlotter::PlotIndex>(this->current_index));
+    this->surfacePlotter.generateSurfacePlotVertices(static_cast<SurfacePlotter::PlotIndex>(this->current_index));
     drawSurfacePlot();
     drawCube();
 
@@ -193,9 +170,8 @@ void GLProgram::initDrawingData(void) {
 
   // set indices
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-               this->surfacePlotter.getNumIndices() * sizeof(uint),
-               this->surfacePlotter.getIndices(), GL_DYNAMIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotter.getNumIndices() * sizeof(uint), this->surfacePlotter.getIndices(),
+               GL_DYNAMIC_DRAW);
 
   // vertices attributes
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
@@ -215,8 +191,7 @@ void GLProgram::initDrawingData(void) {
 
   // set indices
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->cubeEBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, 24 * sizeof(uint),
-               this->surfacePlotter.getCubeIndices(), GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, 24 * sizeof(uint), this->surfacePlotter.getCubeIndices(), GL_STATIC_DRAW);
 
   // vertices attributes
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
@@ -229,11 +204,8 @@ void GLProgram::drawSurfacePlot(void) {
   this->shader.use();
   glBindVertexArray(this->surfacePlotVAO);
   glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
-  glBufferData(GL_ARRAY_BUFFER,
-               this->surfacePlotter.getNumElements() * sizeof(float),
-               this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
-  glDrawElements(GL_LINES, this->surfacePlotter.getNumIndices(),
-                 GL_UNSIGNED_INT, 0);
+  glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
+  glDrawElements(GL_LINES, this->surfacePlotter.getNumIndices(), GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
 }
 
@@ -241,8 +213,7 @@ void GLProgram::drawCube(void) {
   this->whiteShader.use();
   glBindVertexArray(this->cubeVAO);
   glBindBuffer(GL_ARRAY_BUFFER, this->cubeVBO);
-  glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float),
-               this->surfacePlotter.getCubeVertices(), GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), this->surfacePlotter.getCubeVertices(), GL_STATIC_DRAW);
   glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
 }
@@ -276,9 +247,7 @@ void GLProgram::cleanup(CleanupMode cm) {
   }
 }
 
-void GLProgram::setClearColor(float r, float g, float b, float alpha) {
-  this->clearColor = {r, g, b, alpha};
-}
+void GLProgram::setClearColor(float r, float g, float b, float alpha) { this->clearColor = {r, g, b, alpha}; }
 
 uint GLProgram::generateBuffer(void) {
   uint buf;
@@ -295,16 +264,11 @@ uint GLProgram::generateVAO(void) {
 glm::mat4 GLProgram::getViewMatrix(void) { return camera.getViewMatrix(); }
 
 glm::mat4 GLProgram::getProjectionMatrix(void) {
-  return glm::perspective(glm::radians(camera.zoom),
-                          (float)this->windowWidth / (float)this->windowHeight,
-                          0.1f, 99999.0f);
+  return glm::perspective(glm::radians(camera.zoom), (float)this->windowWidth / (float)this->windowHeight, 0.1f, 99999.0f);
 }
 
 glm::mat4 GLProgram::getDefaultModelMatrix(void) {
   // return glm::mat4(1.0f); // identity
-  glm::mat4 z_rotation =
-      glm::rotate(glm::mat4(1.0f), glm::radians(this->rotation),
-                  glm::vec3(1.0f, 0.0f, 1.0f));
-  return z_rotation * glm::rotate(glm::mat4(1.0f), glm::radians(45.0f),
-                                  glm::vec3(0.0f, 1.0f, 0.0f));
+  glm::mat4 z_rotation = glm::rotate(glm::mat4(1.0f), glm::radians(this->rotation), glm::vec3(1.0f, 0.0f, 1.0f));
+  return z_rotation * glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }

@@ -2,17 +2,14 @@
 
 // default constructor
 SurfacePlotter::SurfacePlotter()
-    : xMin(-20.0f), xMax(20.0f), yMin(-20.0f), yMax(20.0f), gridInterval(0.2f),
-      zMin(FLOAT_MAX), zMax(FLOAT_MIN), vertices(NULL), numElements(0),
-      indices(NULL), numIndices(0), cubeVertices(NULL), cubeIndices(NULL) {
+    : xMin(-20.0f), xMax(20.0f), yMin(-20.0f), yMax(20.0f), gridInterval(0.2f), zMin(FLOAT_MAX), zMax(FLOAT_MIN), vertices(NULL),
+      numElements(0), indices(NULL), numIndices(0), cubeVertices(NULL), cubeIndices(NULL) {
 
   setGrid(this->xMin, this->xMax, this->yMin, this->yMax, this->gridInterval);
-  this->cubeIndices = new uint[24]{0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6,
-                                   6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7};
+  this->cubeIndices = new uint[24]{0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7};
 }
 
-void SurfacePlotter::setGrid(float xMin, float xMax, float yMin, float yMax,
-                             float interval) {
+void SurfacePlotter::setGrid(float xMin, float xMax, float yMin, float yMax, float interval) {
   this->xMin = xMin;
   this->xMax = xMax;
   this->yMin = yMin;
@@ -96,8 +93,7 @@ void SurfacePlotter::generateSurfacePlotVertices(PlotIndex plot_index) {
       // add vertex
       this->vertices[(x * numY + y) * 3 + 0] = this->gridPoints[x][y].x; // x
       this->vertices[(x * numY + y) * 3 + 1] = this->gridPoints[x][y].y; // y
-      this->vertices[(x * numY + y) * 3 + 2] =
-          f(this->gridPoints[x][y].x, this->gridPoints[x][y].y, plot_index);
+      this->vertices[(x * numY + y) * 3 + 2] = f(this->gridPoints[x][y].x, this->gridPoints[x][y].y, plot_index);
     }
   }
 
@@ -112,8 +108,7 @@ float SurfacePlotter::f(float x, float y, PlotIndex plot_index) {
   case PlotIndex::plot_sombrero:
     // float z = sin(t) * 8*sin(sqrt(pow(x, 2) + pow(y, 2))) / sqrt(pow(x, 2) +
     // pow(y, 2)); // sombrero equation
-    z = 8 * sin(sqrt(pow(x, 2) + pow(y, 2))) /
-        sqrt(pow(x, 2) + pow(y, 2)); // sombrero equation
+    z = 8 * sin(sqrt(pow(x, 2) + pow(y, 2))) / sqrt(pow(x, 2) + pow(y, 2)); // sombrero equation
     break;
   case PlotIndex::plot_quadsin:
     z = sin(pow(x / 2.5, 2) + pow(y / 2.5, 2));
@@ -144,11 +139,9 @@ void SurfacePlotter::generateCube(void) {
   if (this->cubeVertices)
     delete[] this->cubeVertices;
 
-  this->cubeVertices = new float[24]{
-      this->xMax, this->yMin, this->zMin, this->xMax, this->yMax, this->zMin,
-      this->xMin, this->yMax, this->zMin, this->xMin, this->yMin, this->zMin,
-      this->xMax, this->yMin, this->zMax, this->xMax, this->yMax, this->zMax,
-      this->xMin, this->yMax, this->zMax, this->xMin, this->yMin, this->zMax};
+  this->cubeVertices = new float[24]{this->xMax, this->yMin, this->zMin, this->xMax, this->yMax, this->zMin, this->xMin, this->yMax,
+                                     this->zMin, this->xMin, this->yMin, this->zMin, this->xMax, this->yMin, this->zMax, this->xMax,
+                                     this->yMax, this->zMax, this->xMin, this->yMax, this->zMax, this->xMin, this->yMin, this->zMax};
 }
 
 float SurfacePlotter::getZMin(void) { return this->zMin; }

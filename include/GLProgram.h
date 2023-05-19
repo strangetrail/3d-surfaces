@@ -47,14 +47,7 @@ private:
   void initDrawingData(void);
 
 public:
-  enum class CleanupMode {
-    sdl_quit,
-    sdl_destroy_window,
-    sdl_gl_delete_context,
-    sdl_destroy_renderer,
-    tw_terminate,
-    delete_buffers
-  };
+  enum class CleanupMode { sdl_quit, sdl_destroy_window, sdl_gl_delete_context, sdl_destroy_renderer, tw_terminate, delete_buffers };
 
   SDL_Event event;
 
@@ -66,8 +59,7 @@ public:
 
   GLProgram();
 
-  void init(const char *vertexPath, const char *fragmentPath,
-            const char *whiteFragmentPath);
+  void init(const char *vertexPath, const char *fragmentPath, const char *whiteFragmentPath);
   void run(void);
   void cleanup(CleanupMode cm);
 

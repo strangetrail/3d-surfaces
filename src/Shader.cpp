@@ -64,8 +64,7 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
   glGetProgramiv(ID, GL_LINK_STATUS, &success);
   if (!success) {
     glGetProgramInfoLog(ID, 512, NULL, infoLog);
-    std::cout << "ERROR: SHADER PROGRAM LINKING FAILED\n"
-              << infoLog << std::endl;
+    std::cout << "ERROR: SHADER PROGRAM LINKING FAILED\n" << infoLog << std::endl;
   }
 
   // delete shaders (already linked to program and no longer needed)
@@ -75,18 +74,14 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
 
 void Shader::use(void) { glUseProgram(ID); }
 
-void Shader::setFloatUniform(const std::string &name, float value) const {
-  glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
-}
+void Shader::setFloatUniform(const std::string &name, float value) const { glUniform1f(glGetUniformLocation(ID, name.c_str()), value); }
 
 void Shader::setVec3Uniform(const std::string &name, glm::vec3 value) const {
-  glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1,
-               glm::value_ptr(value));
+  glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
 }
 
 void Shader::setMat4Uniform(const std::string &name, glm::mat4 value) const {
-  glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE,
-                     glm::value_ptr(value));
+  glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 
 void Shader::checkCompileErrors(uint shader, std::string type) {
@@ -96,21 +91,15 @@ void Shader::checkCompileErrors(uint shader, std::string type) {
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
       glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-      std::cout
-          << "ERROR: SHADER COMPILATION ERROR OF TYPE: " << type << "\n"
-          << infoLog
-          << "\n -- --------------------------------------------------- -- "
-          << std::endl;
+      std::cout << "ERROR: SHADER COMPILATION ERROR OF TYPE: " << type << "\n"
+                << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
     }
   } else {
     glGetProgramiv(shader, GL_LINK_STATUS, &success);
     if (!success) {
       glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-      std::cout
-          << "ERROR: PROGRAM LINKING ERROR OF TYPE: " << type << "\n"
-          << infoLog
-          << "\n -- --------------------------------------------------- -- "
-          << std::endl;
+      std::cout << "ERROR: PROGRAM LINKING ERROR OF TYPE: " << type << "\n"
+                << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
     }
   }
 }
