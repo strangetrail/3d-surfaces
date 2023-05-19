@@ -175,7 +175,7 @@ void GLProgram::initDrawingData(void) {
     glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
 
     // set EBO data
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
 
     // vertices attributes
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
@@ -194,7 +194,7 @@ void GLProgram::initDrawingData(void) {
     glBindBuffer(GL_ARRAY_BUFFER, this->cubeVBO);
 
     // set EBO data
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->cubeEBO);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->cubeEBO);
 
     // vertices attributes
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
