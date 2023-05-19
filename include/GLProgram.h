@@ -39,6 +39,7 @@ class GLProgram {
         } clearColor;
 
         int current_index;
+        float rotation;
         Shader shader, whiteShader;
         SurfacePlotter surfacePlotter;
         uint surfacePlotVAO, surfacePlotVBO, surfacePlotEBO;

@@ -92,6 +92,8 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
                " label='Camera center position X' min=-100.0 max=100.0 step=0.1 ");
     TwAddVarRW(this->myBar, "Plot index", TW_TYPE_INT32, &this->current_index,
                " label='Plot index' min=0 max=2 ");
+    TwAddVarRW(this->myBar, "Plot rotation around z", TW_TYPE_FLOAT, &this->rotation,
+               " label='Plot rotation around z' min=-360.0 max=360.0 ");
 
     this->current_index = static_cast<int>(SurfacePlotter::PlotIndex::plot_sombrero);
 
@@ -106,6 +108,8 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
     bind_indices_once.resize(2);
     for (auto &flag: bind_indices_once)
       flag = false;
+
+    rotation = 0.0f;
 
     // set up VAOs and VBOs and EBOs
     initDrawingData();
@@ -174,9 +178,6 @@ void GLProgram::initDrawingData(void) {
     // set VBO data
     glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
 
-    // set EBO data
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
-
     // vertices attributes
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(0);
@@ -192,9 +193,6 @@ void GLProgram::initDrawingData(void) {
 
     // set VBO data
     glBindBuffer(GL_ARRAY_BUFFER, this->cubeVBO);
-
-    // set EBO data
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->cubeEBO);
 
     // vertices attributes
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
@@ -286,7 +284,8 @@ glm::mat4 GLProgram::getProjectionMatrix(void) {
 
 glm::mat4 GLProgram::getDefaultModelMatrix(void) {
     //return glm::mat4(1.0f); // identity
-    return glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 z_rotation = glm::rotate(glm::mat4(1.0f), glm::radians(this->rotation), glm::vec3(1.0f, 0.0f, 1.0f));
+    return z_rotation * glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 /*
