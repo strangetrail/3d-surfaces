@@ -12,35 +12,3 @@ glm::mat4 Camera::getViewMatrix(void) {
       glm::vec3(this->x_position, this->y_position, this->z_position),
       glm::vec3(this->x_front, this->y_front, this->z_front), this->up);
 }
-
-/*
-void Camera::processKeyboard(CameraMovement direction, float deltaTime) {
-    float velocity = this->movementSpeed * deltaTime;
-    switch (direction) {
-        case UP:
-            this->position += this->up * velocity;
-            break;
-        case DOWN:
-            this->position -= this->up * velocity;
-            break;
-        case LEFT:
-            this->position -= this->right * velocity;
-            break;
-        case RIGHT:
-            this->position += this->right * velocity;
-            break;
-    }
-}
-*/
-
-/*
-void Camera::processMouseScroll(float yOffset) {
-    this->zoom -= (float) yOffset * this->zoomSpeed;
-
-    // clamp between max and min zoom values
-    if (this->zoom < MIN_ZOOM)
-        this->zoom = MIN_ZOOM;
-    if (this->zoom > MAX_ZOOM)
-        this->zoom = MAX_ZOOM;
-}
-*/

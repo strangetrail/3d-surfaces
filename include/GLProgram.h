@@ -45,9 +45,6 @@ private:
   uint cubeVAO, cubeVBO, cubeEBO;
 
   void initDrawingData(void);
-  static glm::vec3 getArcballVector(
-      float x,
-      float y); // helper to cursor callback, (x,y) are raw mouse coordinates
 
 public:
   enum class CleanupMode {
@@ -86,18 +83,6 @@ public:
   glm::mat4 getViewMatrix(void);
   glm::mat4 getProjectionMatrix(void);
   glm::mat4 getDefaultModelMatrix(void);
-
-  // event callback functions
-  /*
-  static void framebufferSizeCallback(GLFWwindow* window, int width, int
-  height); static void scrollCallback(GLFWwindow* window, double xoffset, double
-  yoffset); static void mouseButtonCallback(GLFWwindow* window, int button, int
-  action, int mods); static void cursorPosCallback(GLFWwindow* window, double
-  xpos, double ypos);
-  */
-
-  // input
-  // void processInput(void);
 };
 
 #endif // GLPROGRAM_H

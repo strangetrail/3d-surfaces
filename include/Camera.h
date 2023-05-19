@@ -26,10 +26,6 @@ public:
   Camera();
 
   glm::mat4 getViewMatrix(void);
-  /*
-  void processKeyboard(CameraMovement direction, float deltaTime);
-  void processMouseScroll(float yOffset);
-  */
 };
 
 #endif // CAMERA_H
