@@ -115,7 +115,7 @@ float SurfacePlotter::f(float x, float y, PlotIndex plot_index) {
       z = sin(pow(x/2.5, 2) + pow(y/2.5, 2));
       break;
     case PlotIndex::plot_paraboloid:
-      z = (pow(x/1.5,2) + pow(y/1.5,2)) * 0.3; // parabaloid
+      z = (pow(x/1.5,2) + pow(y/1.5,2)) * 0.03; // parabaloid
       break;
     }
 
