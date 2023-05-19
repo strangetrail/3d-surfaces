@@ -33,8 +33,41 @@ void SurfacePlotter::setGrid(float xMin, float xMax, float yMin, float yMax, flo
     }
 }
 
-void SurfacePlotter::generateSurfacePlot(PlotIndex plot_index, int bind_indices_once) {
+void SurfacePlotter::generateSurfacePlotIndices(PlotIndex plot_index) {
+      // indices:
 
+      // deallocte old data
+      if (this->indices)
+          delete[] this->indices;
+
+      // determine number of rows in x and y axes
+      int numX = this->gridPoints.size();
+      int numY = this->gridPoints[0].size();
+
+      // determine number of indices
+      this->numIndices = (numX * (numY-1) + numY * (numX - 1)) * 2;
+
+      // allocate memory for new data
+      this->indices = new uint[this->numIndices];
+
+      int i = 0;
+
+      for (int x = 0; x < numX; ++x) {
+          for (int y = 0; y < numY-1; ++y) {
+              this->indices[i++] = x*numY + y;
+              this->indices[i++] = x*numY + y+1;
+          }
+      }
+
+      for (int y = 0; y < numY; ++y) {
+          for (int x = 0; x < numX-1; ++x) {
+              this->indices[i++] = x*numY + y;
+              this->indices[i++] = (x+1)*numY + y;
+          }
+      }
+}
+
+void SurfacePlotter::generateSurfacePlotVertices(PlotIndex plot_index) {
     // reset ranges
     this->zMin = FLOAT_MAX;
     this->zMax = FLOAT_MIN;
@@ -66,37 +99,6 @@ void SurfacePlotter::generateSurfacePlot(PlotIndex plot_index, int bind_indices_
             this->vertices[(x * numY + y) * 3 + 1] = this->gridPoints[x][y].y; // y
             this->vertices[(x * numY + y) * 3 + 2] = f(this->gridPoints[x][y].x, this->gridPoints[x][y].y, plot_index);
         }
-    }
-
-    if (!bind_indices_once) {
-      // indices:
-      std::cout << "Generating plot indices" << std::endl;
-
-      // deallocte old data
-      if (this->indices)
-          delete[] this->indices;
-
-      // determine number of indices
-      this->numIndices = (numX * (numY-1) + numY * (numX - 1)) * 2;
-
-      // allocate memory for new data
-      this->indices = new uint[this->numIndices];
-
-      int i = 0;
-
-      for (int x = 0; x < numX; ++x) {
-          for (int y = 0; y < numY-1; ++y) {
-              this->indices[i++] = x*numY + y;
-              this->indices[i++] = x*numY + y+1;
-          }
-      }
-
-      for (int y = 0; y < numY; ++y) {
-          for (int x = 0; x < numX-1; ++x) {
-              this->indices[i++] = x*numY + y;
-              this->indices[i++] = (x+1)*numY + y;
-          }
-      }
     }
 
     generateCube();
