@@ -106,8 +106,6 @@ float SurfacePlotter::f(float x, float y, PlotIndex plot_index) {
   float z;
   switch (plot_index) {
   case PlotIndex::plot_sombrero:
-    // float z = sin(t) * 8*sin(sqrt(pow(x, 2) + pow(y, 2))) / sqrt(pow(x, 2) +
-    // pow(y, 2)); // sombrero equation
     z = 8 * sin(sqrt(pow(x, 2) + pow(y, 2))) / sqrt(pow(x, 2) + pow(y, 2)); // sombrero equation
     break;
   case PlotIndex::plot_quadsin:
