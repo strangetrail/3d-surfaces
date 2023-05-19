@@ -14,51 +14,57 @@
 #define FLOAT_MAX 2147483648
 
 class SurfacePlotter {
-    private:
-        // xy grid
-        std::vector<std::vector<glm::vec2>> gridPoints; // 2D array of grid x, y coordinates
-        float xMin;
-        float xMax;
-        float yMin;
-        float yMax;
-        float gridInterval;
-        float zMin;
-        float zMax;
+private:
+  // xy grid
+  std::vector<std::vector<glm::vec2>>
+      gridPoints; // 2D array of grid x, y coordinates
+  float xMin;
+  float xMax;
+  float yMin;
+  float yMax;
+  float gridInterval;
+  float zMin;
+  float zMax;
 
-        // surface plot data
-        float* vertices;
-        uint numElements;
-        uint* indices;
-        uint numIndices;
+  // surface plot data
+  float *vertices;
+  uint numElements;
+  uint *indices;
+  uint numIndices;
 
-        // cube data
-        float* cubeVertices;
-        uint* cubeIndices;
+  // cube data
+  float *cubeVertices;
+  uint *cubeIndices;
 
-    public:
-        enum class PlotIndex: std::int32_t
-          {plot_sombrero = 0, plot_quadsin = 1, plot_paraboloid = 2};
+public:
+  enum class PlotIndex : std::int32_t {
+    plot_sombrero = 0,
+    plot_quadsin = 1,
+    plot_paraboloid = 2
+  };
 
-        SurfacePlotter();
+  SurfacePlotter();
 
-        void setGrid(float xMin, float xMax, float yMin, float yMax, float interval);
-        void generateSurfacePlotIndices(PlotIndex plot_index);
-        void generateSurfacePlotVertices(PlotIndex plot_index);
-        float f(float x, float y, PlotIndex plot_index); // mathematical multi-variable function, returns z value
+  void setGrid(float xMin, float xMax, float yMin, float yMax, float interval);
+  void generateSurfacePlotIndices(PlotIndex plot_index);
+  void generateSurfacePlotVertices(PlotIndex plot_index);
+  float f(float x, float y,
+          PlotIndex plot_index); // mathematical multi-variable function,
+                                 // returns z value
 
-        void generateCube(void);
+  void generateCube(void);
 
-        float getZMin(void);
-        float getZMax(void);
-        float getZRange(void);
+  float getZMin(void);
+  float getZMax(void);
+  float getZRange(void);
 
-        float* getVertices(void);
-        uint getNumElements(void);
-        uint* getIndices(void);
-        uint getNumIndices(void);
+  float *getVertices(void);
+  uint getNumElements(void);
+  uint *getIndices(void);
+  uint getNumIndices(void);
 
-        float* getCubeVertices(void);
-        uint* getCubeIndices(void);
+  float *getCubeVertices(void);
+  uint *getCubeIndices(void);
 };
 
-#endif //SURFACEPLOTTER_H
+#endif // SURFACEPLOTTER_H

@@ -1,10 +1,10 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <string>
 #include <fstream>
-#include <sstream>
 #include <iostream>
+#include <sstream>
+#include <string>
 #define GL_GLEXT_PROTOTYPES
 #include <GL/gl.h>
 #include <glm/glm.hpp>
@@ -12,17 +12,17 @@
 #include <glm/gtc/type_ptr.hpp>
 
 class Shader {
-    public:
-        uint ID;
-        Shader();
-        Shader(const char* vertexPath, const char* fragmentPath);
-        void use(void);
-        void setFloatUniform(const std::string &name, float value) const;
-        void setVec3Uniform(const std::string &name, glm::vec3 value) const;
-        void setMat4Uniform(const std::string &name, glm::mat4 value) const;
+public:
+  uint ID;
+  Shader();
+  Shader(const char *vertexPath, const char *fragmentPath);
+  void use(void);
+  void setFloatUniform(const std::string &name, float value) const;
+  void setVec3Uniform(const std::string &name, glm::vec3 value) const;
+  void setMat4Uniform(const std::string &name, glm::mat4 value) const;
 
-    private:
-        void checkCompileErrors(uint shader, std::string type);
+private:
+  void checkCompileErrors(uint shader, std::string type);
 };
 
-#endif //SHADER_H
+#endif // SHADER_H

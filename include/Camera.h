@@ -8,33 +8,28 @@
 #define MAX_ZOOM 100.0f
 #define MIN_ZOOM 1.0f
 
-enum CameraMovement {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
+enum CameraMovement { UP, DOWN, LEFT, RIGHT };
 
 class Camera {
-    public:
-        float z_position, y_position, x_position;
-        float z_front, y_front, x_front;
-        glm::vec3 up;
-        glm::vec3 right;
+public:
+  float z_position, y_position, x_position;
+  float z_front, y_front, x_front;
+  glm::vec3 up;
+  glm::vec3 right;
 
-        float yaw;
-        float pitch;
-        float movementSpeed;
-        float zoom;
-        float zoomSpeed;
+  float yaw;
+  float pitch;
+  float movementSpeed;
+  float zoom;
+  float zoomSpeed;
 
-        Camera();
+  Camera();
 
-        glm::mat4 getViewMatrix(void);
-        /*
-        void processKeyboard(CameraMovement direction, float deltaTime);
-        void processMouseScroll(float yOffset);
-        */
+  glm::mat4 getViewMatrix(void);
+  /*
+  void processKeyboard(CameraMovement direction, float deltaTime);
+  void processMouseScroll(float yOffset);
+  */
 };
 
-#endif //CAMERA_H
+#endif // CAMERA_H
