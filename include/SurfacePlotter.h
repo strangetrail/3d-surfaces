@@ -42,7 +42,7 @@ class SurfacePlotter {
         SurfacePlotter();
 
         void setGrid(float xMin, float xMax, float yMin, float yMax, float interval);
-        void generateSurfacePlot(PlotIndex plot_index);
+        void generateSurfacePlot(PlotIndex plot_index, int bind_indices_once);
         float f(float x, float y, PlotIndex plot_index); // mathematical multi-variable function, returns z value
 
         void generateCube(void);

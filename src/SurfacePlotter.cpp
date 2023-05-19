@@ -33,7 +33,7 @@ void SurfacePlotter::setGrid(float xMin, float xMax, float yMin, float yMax, flo
     }
 }
 
-void SurfacePlotter::generateSurfacePlot(PlotIndex plot_index) {
+void SurfacePlotter::generateSurfacePlot(PlotIndex plot_index, int bind_indices_once) {
 
     // reset ranges
     this->zMin = FLOAT_MAX;
@@ -68,32 +68,35 @@ void SurfacePlotter::generateSurfacePlot(PlotIndex plot_index) {
         }
     }
 
-    // indices:
+    if (!bind_indices_once) {
+      // indices:
+      std::cout << "Generating plot indices" << std::endl;
 
-    // deallocte old data
-    if (this->indices)
-        delete[] this->indices;
+      // deallocte old data
+      if (this->indices)
+          delete[] this->indices;
 
-    // determine number of indices
-    this->numIndices = (numX * (numY-1) + numY * (numX - 1)) * 2;
+      // determine number of indices
+      this->numIndices = (numX * (numY-1) + numY * (numX - 1)) * 2;
 
-    // allocate memory for new data
-    this->indices = new uint[this->numIndices];
+      // allocate memory for new data
+      this->indices = new uint[this->numIndices];
 
-    int i = 0;
+      int i = 0;
 
-    for (int x = 0; x < numX; ++x) {
-        for (int y = 0; y < numY-1; ++y) {
-            this->indices[i++] = x*numY + y;
-            this->indices[i++] = x*numY + y+1;
-        }
-    }
+      for (int x = 0; x < numX; ++x) {
+          for (int y = 0; y < numY-1; ++y) {
+              this->indices[i++] = x*numY + y;
+              this->indices[i++] = x*numY + y+1;
+          }
+      }
 
-    for (int y = 0; y < numY; ++y) {
-        for (int x = 0; x < numX-1; ++x) {
-            this->indices[i++] = x*numY + y;
-            this->indices[i++] = (x+1)*numY + y;
-        }
+      for (int y = 0; y < numY; ++y) {
+          for (int x = 0; x < numX-1; ++x) {
+              this->indices[i++] = x*numY + y;
+              this->indices[i++] = (x+1)*numY + y;
+          }
+      }
     }
 
     generateCube();

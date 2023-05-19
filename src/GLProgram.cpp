@@ -141,7 +141,7 @@ void GLProgram::run(void) {
         this->whiteShader.setMat4Uniform("model", getDefaultModelMatrix() * modelMatrix);
 
         // render
-        this->surfacePlotter.generateSurfacePlot(static_cast<SurfacePlotter::PlotIndex>(this->current_index));
+        this->surfacePlotter.generateSurfacePlot(static_cast<SurfacePlotter::PlotIndex>(this->current_index), bind_indices_once[0]);
         drawSurfacePlot();
         drawCube();
 
