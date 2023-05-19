@@ -2,6 +2,7 @@
 #define GLPROGRAM_H
 
 #include <iostream>
+#include <vector>
 #include "Shader.h"
 #include "SurfacePlotter.h"
 #include "Camera.h"
@@ -28,6 +29,7 @@ class GLProgram {
         TwBar *myBar;
 
         int quit;
+        std::vector<int> bind_indices_once;
 
         struct color {
             float r = 0.0f;

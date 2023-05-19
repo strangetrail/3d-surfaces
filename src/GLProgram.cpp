@@ -103,6 +103,10 @@ void GLProgram::init(const char* vertexPath, const char* fragmentPath, const cha
     this->shader = Shader(vertexPath, fragmentPath);
     this->whiteShader = Shader(vertexPath, whiteFragmentPath);
 
+    bind_indices_once.resize(2);
+    for (auto &flag: bind_indices_once)
+      flag = false;
+
     // set up VAOs and VBOs and EBOs
     initDrawingData();
 }
@@ -204,8 +208,11 @@ void GLProgram::drawSurfacePlot(void) {
     glBindVertexArray(this->surfacePlotVAO);
     glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
     glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements()*sizeof(float), this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotter.getNumIndices()*sizeof(uint), this->surfacePlotter.getIndices(), GL_DYNAMIC_DRAW);
+    if (!bind_indices_once[0]) {
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotter.getNumIndices()*sizeof(uint), this->surfacePlotter.getIndices(), GL_DYNAMIC_DRAW);
+      bind_indices_once[0] = 1;
+    }
     glDrawElements(GL_LINES, this->surfacePlotter.getNumIndices(),GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
@@ -215,8 +222,11 @@ void GLProgram::drawCube(void) {
     glBindVertexArray(this->cubeVAO);
     glBindBuffer(GL_ARRAY_BUFFER, this->cubeVBO);
     glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), this->surfacePlotter.getCubeVertices(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->cubeEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 24*sizeof(uint), this->surfacePlotter.getCubeIndices(), GL_STATIC_DRAW);
+    if (!bind_indices_once[1]) {
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->cubeEBO);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, 24*sizeof(uint), this->surfacePlotter.getCubeIndices(), GL_STATIC_DRAW);
+      bind_indices_once[1] = 1;
+    }
     glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
