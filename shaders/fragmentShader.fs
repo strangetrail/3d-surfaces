@@ -27,7 +27,7 @@ vec4 getColor(float z) {
     float diffBlue = endBlue - startBlue;
 
     if (switch_contrast == 1)
-      coeff = 1.5;
+      coeff = 2.0;
     else
       coeff = 1.0;
 

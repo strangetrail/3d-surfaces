@@ -229,14 +229,17 @@ void GLProgram::drawSurfacePlot(void) {
     glDrawElements(GL_TRIANGLES, this->surfacePlotter.getNumTriangles(), GL_UNSIGNED_INT, 0);
   }
 
-  this->shader.setIntUniform("switch_contrast", 1);
-  glPolygonOffset(0, 0);
-  glDisable(GL_POLYGON_OFFSET_FILL);
+  if (!this->continuous) {
+    this->shader.setIntUniform("switch_contrast", 1);
+    glPolygonOffset(0, 0);
+    glDisable(GL_POLYGON_OFFSET_FILL);
 
-  glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
-  glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
-  glDrawElements(GL_LINES, this->surfacePlotter.getNumIndices(), GL_UNSIGNED_INT, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
+    glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(),
+                 GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
+    glDrawElements(GL_LINES, this->surfacePlotter.getNumIndices(), GL_UNSIGNED_INT, 0);
+  }
 
   glBindVertexArray(0);
 }
