@@ -3,7 +3,7 @@
 // default constructor
 SurfacePlotter::SurfacePlotter()
     : xMin(-20.0f), xMax(20.0f), yMin(-20.0f), yMax(20.0f), gridInterval(0.2f), zMin(FLOAT_MAX), zMax(FLOAT_MIN), vertices(NULL),
-      numElements(0), indices(NULL), numIndices(0), cubeVertices(NULL), cubeIndices(NULL) {
+      numElements(0), indices(NULL), numIndices(0), triangles(NULL), numTriangles(0), cubeVertices(NULL), cubeIndices(NULL) {
 
   setGrid(this->xMin, this->xMax, this->yMin, this->yMax, this->gridInterval);
   this->cubeIndices = new uint[24]{0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7};
@@ -30,7 +30,7 @@ void SurfacePlotter::setGrid(float xMin, float xMax, float yMin, float yMax, flo
 }
 
 void SurfacePlotter::generateSurfacePlotIndices(PlotIndex plot_index) {
-  // indices:
+  // lines:
 
   // deallocte old data
   if (this->indices)
@@ -59,6 +59,32 @@ void SurfacePlotter::generateSurfacePlotIndices(PlotIndex plot_index) {
     for (int x = 0; x < numX - 1; ++x) {
       this->indices[i++] = x * numY + y;
       this->indices[i++] = (x + 1) * numY + y;
+    }
+  }
+
+  // triangles:
+
+  // deallocte old data
+  if (this->triangles)
+    delete[] this->triangles;
+
+  // determine number of indices
+  this->numTriangles = (numY - 1) * (numX - 1) * 6;
+
+  // allocate memory for new data
+  this->triangles = new uint[this->numTriangles];
+
+  i = 0;
+
+  for (int y = 0; y < numY - 1; ++y) {
+    for (int x = 0; x < numX - 1; ++x) {
+      triangles[i++] = y * numY + x;
+      triangles[i++] = y * numY + x + 1;
+      triangles[i++] = (y + 1) * numY + x + 1;
+
+      triangles[i++] = y * numY + x;
+      triangles[i++] = (y + 1) * numY + x + 1;
+      triangles[i++] = (y + 1) * numY + x;
     }
   }
 }
@@ -142,6 +168,13 @@ void SurfacePlotter::generateCube(void) {
                                      this->yMax, this->zMax, this->xMin, this->yMax, this->zMax, this->xMin, this->yMin, this->zMax};
 }
 
+void SurfacePlotter::cleanup() {
+  delete[] this->vertices;
+  delete[] this->indices;
+  delete[] this->triangles;
+  delete[] this->cubeVertices;
+}
+
 float SurfacePlotter::getZMin(void) { return this->zMin; }
 
 float SurfacePlotter::getZMax(void) { return this->zMax; }
@@ -155,6 +188,10 @@ uint SurfacePlotter::getNumElements(void) { return this->numElements; }
 uint *SurfacePlotter::getIndices(void) { return this->indices; }
 
 uint SurfacePlotter::getNumIndices(void) { return this->numIndices; }
+
+uint *SurfacePlotter::getTriangles(void) { return this->triangles; }
+
+uint SurfacePlotter::getNumTriangles(void) { return this->numTriangles; }
 
 float *SurfacePlotter::getCubeVertices(void) { return this->cubeVertices; }
 

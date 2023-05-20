@@ -107,6 +107,8 @@ void GLProgram::init(const char *vertexPath, const char *fragmentPath, const cha
   glEnable(GL_BLEND);
   glEnable(GL_DEPTH_TEST);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glPolygonOffset(1, 0);
+  glEnable(GL_POLYGON_OFFSET_FILL);
 }
 
 void GLProgram::run(void) {
@@ -166,20 +168,26 @@ void GLProgram::initDrawingData(void) {
   this->surfacePlotVAO = generateVAO();
   this->surfacePlotVBO = generateBuffer();
   this->surfacePlotEBO = generateBuffer();
+  this->surfacePlotEBOTriangles = generateBuffer();
 
   glBindVertexArray(this->surfacePlotVAO);
 
   // set VBO data
   glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
 
+  // vertices attributes
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
+  glEnableVertexAttribArray(0);
+
   // set indices
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotter.getNumIndices() * sizeof(uint), this->surfacePlotter.getIndices(),
                GL_DYNAMIC_DRAW);
 
-  // vertices attributes
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
-  glEnableVertexAttribArray(0);
+  // set triangles
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBOTriangles);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotter.getNumTriangles() * sizeof(uint), this->surfacePlotter.getTriangles(),
+               GL_DYNAMIC_DRAW);
 
   // CUBE
 
@@ -193,23 +201,36 @@ void GLProgram::initDrawingData(void) {
   // set VBO data
   glBindBuffer(GL_ARRAY_BUFFER, this->cubeVBO);
 
-  // set indices
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->cubeEBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, 24 * sizeof(uint), this->surfacePlotter.getCubeIndices(), GL_STATIC_DRAW);
-
   // vertices attributes
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
   glEnableVertexAttribArray(0);
+
+  // set indices
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->cubeEBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, 24 * sizeof(uint), this->surfacePlotter.getCubeIndices(), GL_STATIC_DRAW);
 
   glBindVertexArray(0);
 }
 
 void GLProgram::drawSurfacePlot(void) {
   this->shader.use();
+
   glBindVertexArray(this->surfacePlotVAO);
+
+  this->shader.setIntUniform("switch_contrast", 0);
+
   glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
   glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBOTriangles);
+  glDrawElements(GL_TRIANGLES, this->surfacePlotter.getNumTriangles(), GL_UNSIGNED_INT, 0);
+
+  this->shader.setIntUniform("switch_contrast", 1);
+
+  glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
+  glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
   glDrawElements(GL_LINES, this->surfacePlotter.getNumIndices(), GL_UNSIGNED_INT, 0);
+
   glBindVertexArray(0);
 }
 
@@ -232,6 +253,8 @@ void GLProgram::cleanup(CleanupMode cm) {
     glDeleteVertexArrays(1, &(this->cubeVAO));
     glDeleteBuffers(1, &(this->cubeVBO));
     glDeleteBuffers(1, &this->cubeEBO);
+
+    surfacePlotter.cleanup();
     [[fallthrough]];
   case CleanupMode::tw_terminate:
     TwTerminate();

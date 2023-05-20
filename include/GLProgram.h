@@ -41,7 +41,7 @@ private:
   float rotation;
   Shader shader, whiteShader;
   SurfacePlotter surfacePlotter;
-  uint surfacePlotVAO, surfacePlotVBO, surfacePlotEBO;
+  uint surfacePlotVAO, surfacePlotVBO, surfacePlotEBO, surfacePlotEBOTriangles;
   uint cubeVAO, cubeVBO, cubeEBO;
 
   void initDrawingData(void);

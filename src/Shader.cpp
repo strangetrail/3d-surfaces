@@ -74,6 +74,8 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
 
 void Shader::use(void) { glUseProgram(ID); }
 
+void Shader::setIntUniform(const std::string &name, int value) const { glUniform1i(glGetUniformLocation(ID, name.c_str()), value); }
+
 void Shader::setFloatUniform(const std::string &name, float value) const { glUniform1f(glGetUniformLocation(ID, name.c_str()), value); }
 
 void Shader::setVec3Uniform(const std::string &name, glm::vec3 value) const {

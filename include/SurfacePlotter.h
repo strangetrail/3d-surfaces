@@ -28,8 +28,10 @@ private:
   // surface plot data
   float *vertices;
   uint numElements;
-  uint *indices;
+  uint *indices; // lines
   uint numIndices;
+  uint *triangles; // triangles
+  uint numTriangles;
 
   // cube data
   float *cubeVertices;
@@ -57,9 +59,13 @@ public:
   uint getNumElements(void);
   uint *getIndices(void);
   uint getNumIndices(void);
+  uint *getTriangles(void);
+  uint getNumTriangles(void);
 
   float *getCubeVertices(void);
   uint *getCubeIndices(void);
+
+  void cleanup();
 };
 
 #endif // SURFACEPLOTTER_H

@@ -3,7 +3,9 @@
 in vec3 fragPos;
 
 out vec4 FragColor;
+out float coeff;
 
+uniform int switch_contrast;
 uniform float zMin;
 uniform float zRange;
 
@@ -24,9 +26,14 @@ vec4 getColor(float z) {
     float diffGreen = endGreen - startGreen;
     float diffBlue = endBlue - startBlue;
 
-    diffRed = (diffRed * percentFade) + startRed;
-    diffGreen = (diffGreen * percentFade) + startGreen;
-    diffBlue = (diffBlue * percentFade) + startBlue;
+    if (switch_contrast == 1)
+      coeff = 1.5;
+    else
+      coeff = 1.0;
+
+    diffRed = coeff * (diffRed * percentFade) + startRed;
+    diffGreen = coeff * (diffGreen * percentFade) + startGreen;
+    diffBlue = coeff * (diffBlue * percentFade) + startBlue;
 
     return vec4(diffRed, diffGreen, diffBlue, 1.0);
 }
