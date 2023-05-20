@@ -86,8 +86,10 @@ void GLProgram::init(const char *vertexPath, const char *fragmentPath, const cha
   TwAddVarRW(this->myBar, "Plot index", TW_TYPE_INT32, &this->current_index, " label='Plot index' min=0 max=2 ");
   TwAddVarRW(this->myBar, "Plot rotation around z", TW_TYPE_FLOAT, &this->rotation,
              " label='Plot rotation around z' min=-360.0 max=360.0 ");
+  TwAddVarRW(this->myBar, "Enable continuous surface", TW_TYPE_INT32, &this->continuous, " label='Enable continuous surface' min=0 max=1 ");
 
   this->current_index = static_cast<int>(SurfacePlotter::PlotIndex::plot_sombrero);
+  this->continuous = 1;
 
   // GL calls
   glViewport(0, 0, this->windowWidth, this->windowHeight);
@@ -215,14 +217,17 @@ void GLProgram::drawSurfacePlot(void) {
 
   glBindVertexArray(this->surfacePlotVAO);
 
-  this->shader.setIntUniform("switch_contrast", 0);
-  glPolygonOffset(1, 0);
-  glEnable(GL_POLYGON_OFFSET_FILL);
+  if (this->continuous) {
+    this->shader.setIntUniform("switch_contrast", 0);
+    glPolygonOffset(1, 0);
+    glEnable(GL_POLYGON_OFFSET_FILL);
 
-  glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
-  glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBOTriangles);
-  glDrawElements(GL_TRIANGLES, this->surfacePlotter.getNumTriangles(), GL_UNSIGNED_INT, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
+    glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(),
+                 GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBOTriangles);
+    glDrawElements(GL_TRIANGLES, this->surfacePlotter.getNumTriangles(), GL_UNSIGNED_INT, 0);
+  }
 
   this->shader.setIntUniform("switch_contrast", 1);
   glPolygonOffset(0, 0);
