@@ -224,7 +224,7 @@ void GLProgram::drawSurfacePlot(void) {
 
     glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
     glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(),
-                 GL_STATIC_DRAW);
+                 GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBOTriangles);
     glDrawElements(GL_TRIANGLES, this->surfacePlotter.getNumTriangles(), GL_UNSIGNED_INT, 0);
   }
@@ -236,7 +236,7 @@ void GLProgram::drawSurfacePlot(void) {
 
     glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
     glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(),
-                 GL_STATIC_DRAW);
+                 GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->surfacePlotEBO);
     glDrawElements(GL_LINES, this->surfacePlotter.getNumIndices(), GL_UNSIGNED_INT, 0);
   }
@@ -248,7 +248,7 @@ void GLProgram::drawCube(void) {
   this->whiteShader.use();
   glBindVertexArray(this->cubeVAO);
   glBindBuffer(GL_ARRAY_BUFFER, this->cubeVBO);
-  glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), this->surfacePlotter.getCubeVertices(), GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), this->surfacePlotter.getCubeVertices(), GL_DYNAMIC_DRAW);
   glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
 }
