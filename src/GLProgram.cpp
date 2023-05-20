@@ -107,8 +107,6 @@ void GLProgram::init(const char *vertexPath, const char *fragmentPath, const cha
   glEnable(GL_BLEND);
   glEnable(GL_DEPTH_TEST);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glPolygonOffset(1, 0);
-  glEnable(GL_POLYGON_OFFSET_FILL);
 }
 
 void GLProgram::run(void) {
@@ -218,6 +216,8 @@ void GLProgram::drawSurfacePlot(void) {
   glBindVertexArray(this->surfacePlotVAO);
 
   this->shader.setIntUniform("switch_contrast", 0);
+  glPolygonOffset(1, 0);
+  glEnable(GL_POLYGON_OFFSET_FILL);
 
   glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
   glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
@@ -225,6 +225,8 @@ void GLProgram::drawSurfacePlot(void) {
   glDrawElements(GL_TRIANGLES, this->surfacePlotter.getNumTriangles(), GL_UNSIGNED_INT, 0);
 
   this->shader.setIntUniform("switch_contrast", 1);
+  glPolygonOffset(0, 0);
+  glDisable(GL_POLYGON_OFFSET_FILL);
 
   glBindBuffer(GL_ARRAY_BUFFER, this->surfacePlotVBO);
   glBufferData(GL_ARRAY_BUFFER, this->surfacePlotter.getNumElements() * sizeof(float), this->surfacePlotter.getVertices(), GL_DYNAMIC_DRAW);
