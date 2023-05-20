@@ -29,7 +29,7 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
     // extract strings from streams
     vertexString = vertexStream.str();
     fragmentString = fragmentStream.str();
-  } catch (std::ifstream::failure e) {
+  } catch (std::ifstream::failure &e) {
     std::cout << "ERROR: SHADER FILE WAS UNSUCCESSFULLY READ" << std::endl;
     exit(-1);
   }

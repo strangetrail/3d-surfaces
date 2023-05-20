@@ -129,7 +129,7 @@ void SurfacePlotter::generateSurfacePlotVertices(PlotIndex plot_index) {
 float SurfacePlotter::f(float x, float y, PlotIndex plot_index) {
 
   // EQUATION
-  float z;
+  float z = 0;
   switch (plot_index) {
   case PlotIndex::plot_sombrero:
     z = 8 * sin(sqrt(pow(x, 2) + pow(y, 2))) / sqrt(pow(x, 2) + pow(y, 2)); // sombrero equation
