@@ -59,6 +59,7 @@ public:
   static glm::mat4 modelMatrix;
 
   GLProgram();
+  ~GLProgram();
 
   void init(const char *vertexPath, const char *fragmentPath, const char *whiteFragmentPath);
   void run(void);

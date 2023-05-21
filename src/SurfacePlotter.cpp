@@ -9,6 +9,8 @@ SurfacePlotter::SurfacePlotter()
   this->cubeIndices = new uint[24]{0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7};
 }
 
+SurfacePlotter::~SurfacePlotter() { cleanup(); }
+
 void SurfacePlotter::setGrid(float xMin, float xMax, float yMin, float yMax, float interval) {
   this->xMin = xMin;
   this->xMax = xMax;

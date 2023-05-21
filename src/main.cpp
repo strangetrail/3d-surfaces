@@ -21,6 +21,5 @@ int main() {
   program.init(vertexShaderPath, fragmentShaderPath, whiteFragmentShaderPath);
   program.setClearColor(0.05f, 0.18f, 0.25f, 1.0f);
   program.run();
-  program.cleanup(GLProgram::CleanupMode::delete_buffers);
   return 0;
 }

@@ -3,6 +3,8 @@
 
 GLProgram::GLProgram() {}
 
+GLProgram::~GLProgram() { cleanup(GLProgram::CleanupMode::delete_buffers); }
+
 void GLProgram::init(const char *vertexPath, const char *fragmentPath, const char *whiteFragmentPath) {
 
   // initialize window system
@@ -264,7 +266,6 @@ void GLProgram::cleanup(CleanupMode cm) {
     glDeleteBuffers(1, &(this->cubeVBO));
     glDeleteBuffers(1, &this->cubeEBO);
 
-    surfacePlotter.cleanup();
     [[fallthrough]];
   case CleanupMode::tw_terminate:
     TwTerminate();

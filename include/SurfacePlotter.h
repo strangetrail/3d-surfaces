@@ -41,6 +41,7 @@ public:
   enum class PlotIndex : std::int32_t { plot_sombrero = 0, plot_quadsin = 1, plot_paraboloid = 2 };
 
   SurfacePlotter();
+  ~SurfacePlotter();
 
   void setGrid(float xMin, float xMax, float yMin, float yMax, float interval);
   void generateSurfacePlotIndices(PlotIndex plot_index);
