@@ -37,7 +37,7 @@ private:
     float alpha = 1.0f;
   } clearColor;
 
-  int continuous;
+  bool continuous;
   int current_index;
   float rotation;
   Shader shader, whiteShader;

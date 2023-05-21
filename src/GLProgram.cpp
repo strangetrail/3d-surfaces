@@ -85,13 +85,13 @@ void GLProgram::init(const char *vertexPath, const char *fragmentPath, const cha
              " label='Camera center position Y' min=-100.0 max=100.0 step=0.1 ");
   TwAddVarRW(this->myBar, "Camera center X", TW_TYPE_FLOAT, &this->camera.x_front,
              " label='Camera center position X' min=-100.0 max=100.0 step=0.1 ");
-  TwAddVarRW(this->myBar, "Plot index", TW_TYPE_INT32, &this->current_index, " label='Plot index' min=0 max=5 ");
   TwAddVarRW(this->myBar, "Plot rotation around z", TW_TYPE_FLOAT, &this->rotation,
              " label='Plot rotation around z' min=-360.0 max=360.0 ");
-  TwAddVarRW(this->myBar, "Enable continuous surface", TW_TYPE_INT32, &this->continuous, " label='Enable continuous surface' min=0 max=1 ");
+  TwAddVarRW(this->myBar, "Plot index", TW_TYPE_INT32, &this->current_index, " label='Plot index' min=0 max=5 ");
+  TwAddVarRW(this->myBar, "Enable continuous surface", TW_TYPE_BOOLCPP, &this->continuous, " label='Enable continuous surface' ");
 
   this->current_index = static_cast<int>(SurfacePlotter::PlotIndex::plot_sombrero);
-  this->continuous = 1;
+  this->continuous = true;
 
   // GL calls
   glViewport(0, 0, this->windowWidth, this->windowHeight);
