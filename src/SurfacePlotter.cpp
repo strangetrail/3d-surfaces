@@ -132,6 +132,9 @@ float SurfacePlotter::f(float x, float y, PlotIndex plot_index) {
 
   // EQUATION
   float z = 0;
+  float a = 2.0f, b = 3.0f, c = 20.0f;
+  float powx2 = pow(x, 2), powy2 = pow(y, 2);
+  float expargx = a * powx2, expargy = b * powy2;
   switch (plot_index) {
   case PlotIndex::plot_sombrero:
     z = 8 * sin(sqrt(pow(x, 2) + pow(y, 2))) / sqrt(pow(x, 2) + pow(y, 2)); // sombrero equation
@@ -141,6 +144,15 @@ float SurfacePlotter::f(float x, float y, PlotIndex plot_index) {
     break;
   case PlotIndex::plot_paraboloid:
     z = (pow(x / 1.5, 2) + pow(y / 1.5, 2)) * 0.03; // parabaloid
+    break;
+  case PlotIndex::plot_004:
+    z = -x * y * exp(-(expargx + expargy)) * c;
+    break;
+  case PlotIndex::plot_005:
+    z = (expargx + expargy) * exp(-(expargx + expargy)) * c;
+    break;
+  case PlotIndex::plot_006:
+    z = sin(pow(x, 2) + 0.1 * pow(y, 2)) / (0.1 + pow(x, 2) + pow(y, 2)) + (pow(x, 2) + 1.9 * pow(y, 2)) * exp(1 - pow(y, 2)) / 4.0;
     break;
   }
 

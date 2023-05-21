@@ -38,7 +38,14 @@ private:
   uint *cubeIndices;
 
 public:
-  enum class PlotIndex : std::int32_t { plot_sombrero = 0, plot_quadsin = 1, plot_paraboloid = 2 };
+  enum class PlotIndex : std::int32_t {
+    plot_sombrero = 0,
+    plot_quadsin = 1,
+    plot_paraboloid = 2,
+    plot_004 = 3,
+    plot_005 = 4,
+    plot_006 = 5
+  };
 
   SurfacePlotter();
   ~SurfacePlotter();
