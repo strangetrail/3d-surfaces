@@ -268,6 +268,8 @@ void GLProgram::cleanup(CleanupMode cm) {
     glDeleteBuffers(1, &(this->cubeVBO));
     glDeleteBuffers(1, &this->cubeEBO);
 
+    this->shader.cleanup();
+    this->whiteShader.cleanup();
     [[fallthrough]];
   case CleanupMode::tw_terminate:
     TwTerminate();

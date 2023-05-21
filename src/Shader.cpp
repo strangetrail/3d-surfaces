@@ -105,3 +105,5 @@ void Shader::checkCompileErrors(uint shader, std::string type) {
     }
   }
 }
+
+void Shader::cleanup(void) { glDeleteProgram(ID); }
