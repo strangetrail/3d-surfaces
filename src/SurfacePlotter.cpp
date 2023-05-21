@@ -5,6 +5,9 @@ SurfacePlotter::SurfacePlotter()
     : xMin(-10.0f), xMax(10.0f), yMin(-10.0f), yMax(10.0f), gridInterval(0.2f), zMin(FLOAT_MAX), zMax(FLOAT_MIN), vertices(NULL),
       numElements(0), indices(NULL), numIndices(0), triangles(NULL), numTriangles(0), cubeVertices(NULL), cubeIndices(NULL) {
 
+  this->a = 0.35f;
+  this->b = 0.15f;
+  this->c = 5.0f;
   setGrid(this->xMin, this->xMax, this->yMin, this->yMax, this->gridInterval);
   this->cubeIndices = new uint[24]{0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7};
 }
@@ -132,7 +135,6 @@ float SurfacePlotter::f(float x, float y, PlotIndex plot_index) {
 
   // EQUATION
   float z = 0;
-  float a = 2.0f, b = 3.0f, c = 20.0f;
   float powx2 = pow(x, 2), powy2 = pow(y, 2);
   float expargx = a * powx2, expargy = b * powy2;
   switch (plot_index) {

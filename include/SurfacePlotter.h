@@ -47,6 +47,8 @@ public:
     plot_006 = 5
   };
 
+  float a, b, c;
+
   SurfacePlotter();
   ~SurfacePlotter();
 

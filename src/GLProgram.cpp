@@ -74,21 +74,28 @@ void GLProgram::init(const char *vertexPath, const char *fragmentPath, const cha
   TwWindowSize(this->windowWidth, this->windowHeight);
   this->myBar = TwNewBar("Settings");
   TwAddVarRW(this->myBar, "Camera eye Z", TW_TYPE_FLOAT, &this->camera.z_position,
-             " label='Camera eye position Z' min=-100.0 max=100.0 step=0.1 ");
+             " label='Camera eye position Z' group=Camera min=-100.0 max=100.0 step=0.1 ");
   TwAddVarRW(this->myBar, "Camera eye Y", TW_TYPE_FLOAT, &this->camera.y_position,
-             " label='Camera eye position Y' min=-100.0 max=100.0 step=0.1 ");
+             " label='Camera eye position Y' group=Camera min=-100.0 max=100.0 step=0.1 ");
   TwAddVarRW(this->myBar, "Camera eye X", TW_TYPE_FLOAT, &this->camera.x_position,
-             " label='Camera eye position X' min=-100.0 max=100.0 step=0.1 ");
+             " label='Camera eye position X' group=Camera min=-100.0 max=100.0 step=0.1 ");
   TwAddVarRW(this->myBar, "Camera center Z", TW_TYPE_FLOAT, &this->camera.z_front,
-             " label='Camera center position Z' min=-100.0 max=100.0 step=0.1 ");
+             " label='Camera center position Z' group=Camera min=-100.0 max=100.0 step=0.1 ");
   TwAddVarRW(this->myBar, "Camera center Y", TW_TYPE_FLOAT, &this->camera.y_front,
-             " label='Camera center position Y' min=-100.0 max=100.0 step=0.1 ");
+             " label='Camera center position Y' group=Camera min=-100.0 max=100.0 step=0.1 ");
   TwAddVarRW(this->myBar, "Camera center X", TW_TYPE_FLOAT, &this->camera.x_front,
-             " label='Camera center position X' min=-100.0 max=100.0 step=0.1 ");
+             " label='Camera center position X' group=Camera min=-100.0 max=100.0 step=0.1 ");
   TwAddVarRW(this->myBar, "Plot rotation around z", TW_TYPE_FLOAT, &this->rotation,
-             " label='Plot rotation around z' min=-360.0 max=360.0 ");
-  TwAddVarRW(this->myBar, "Plot index", TW_TYPE_INT32, &this->current_index, " label='Plot index' min=0 max=5 ");
-  TwAddVarRW(this->myBar, "Enable continuous surface", TW_TYPE_BOOLCPP, &this->continuous, " label='Enable continuous surface' ");
+             " label='Plot rotation around z' group=Plot min=-360.0 max=360.0 step=0.1 ");
+  TwAddVarRW(this->myBar, "Plot index", TW_TYPE_INT32, &this->current_index, " label='Plot index' group=Plot min=0 max=5 ");
+  TwAddVarRW(this->myBar, "Enable continuous surface", TW_TYPE_BOOLCPP, &this->continuous,
+             " label='Enable continuous surface' group=Plot ");
+  TwAddVarRW(this->myBar, "Function parameter a", TW_TYPE_FLOAT, &this->surfacePlotter.a,
+             " label='Function parameter a' group=Function min=-100.0 max=100.0 step=0.05 ");
+  TwAddVarRW(this->myBar, "Function parameter b", TW_TYPE_FLOAT, &this->surfacePlotter.b,
+             " label='Function parameter b' group=Function min=-100.0 max=100.0 step=0.05 ");
+  TwAddVarRW(this->myBar, "Function parameter c", TW_TYPE_FLOAT, &this->surfacePlotter.c,
+             " label='Function parameter c' group=Function min=-100.0 max=100.0 step=0.05 ");
 
   this->current_index = static_cast<int>(SurfacePlotter::PlotIndex::plot_sombrero);
   this->continuous = true;
