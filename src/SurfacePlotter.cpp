@@ -34,7 +34,7 @@ void SurfacePlotter::setGrid(float xMin, float xMax, float yMin, float yMax, flo
   }
 }
 
-void SurfacePlotter::generateSurfacePlotIndices(PlotIndex plot_index) {
+void SurfacePlotter::generateSurfacePlotIndices() {
   // lines:
 
   // deallocte old data

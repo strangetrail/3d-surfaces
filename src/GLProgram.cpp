@@ -110,7 +110,7 @@ void GLProgram::init(const char *vertexPath, const char *fragmentPath, const cha
 
   rotation = 0.0f;
 
-  this->surfacePlotter.generateSurfacePlotIndices(static_cast<SurfacePlotter::PlotIndex>(this->current_index));
+  this->surfacePlotter.generateSurfacePlotIndices();
 
   // set up VAOs and VBOs and EBOs
   initDrawingData();

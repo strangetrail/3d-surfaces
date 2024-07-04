@@ -53,7 +53,7 @@ public:
   ~SurfacePlotter();
 
   void setGrid(float xMin, float xMax, float yMin, float yMax, float interval);
-  void generateSurfacePlotIndices(PlotIndex plot_index);
+  void generateSurfacePlotIndices();
   void generateSurfacePlotVertices(PlotIndex plot_index);
   float f(float x, float y,
           PlotIndex plot_index); // mathematical multi-variable function,
