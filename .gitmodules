@@ -1,3 +1,3 @@
 [submodule "anttweakbar"]
 	path = anttweakbar
-	url = git@github.com:strangetrail/anttweakbar.git
+	url = https://github.com/strangetrail/anttweakbar.git
